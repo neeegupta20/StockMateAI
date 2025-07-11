@@ -98,7 +98,7 @@ const styles=StyleSheet.create({
   },
   button:{
     paddingHorizontal:110,
-    backgroundColor:"violet",
+    backgroundColor:"#592693",
     paddingVertical:15,
     marginBottom:20,
     borderRadius:20
