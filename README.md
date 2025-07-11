@@ -34,21 +34,11 @@
 |------------|------------------------------------------|
 | Frontend   | Expo React Native (TypeScript)           |
 | Backend    | Node.js (Express), Python (ML Models)    |
-| ML         | Scikit-learn, Joblib                     |
+| ML         | Scikit-learn, Joblib, Numpy, Pandas      |
 | LLM        | Google Gemini via `google.generativeai`  |
-| Storage    | AsyncStorage (local stock view history)  |
 | Data       | Yahoo Finance API (`yfinance`)           |
 
 ---
-
-## 📦 Folder Structure
-
-- StockMateAI/
- - ├─ backend/ # Node.js backend API
- - ├─ machineLearning/ # Python ML models & Gemini reasoning
- - ├─ frontend/ # Expo React Native mobile app
- - ├─ .gitignore
- - ├─ README.md
 
 ## Author
  - Neel Gupta
