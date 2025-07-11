@@ -43,12 +43,12 @@
 
 ## 📦 Folder Structure
 
-StockMateAI/
-├── backend/ # Node.js backend API
-├── machineLearning/ # Python ML models & Gemini reasoning
-├── frontend/ # Expo React Native mobile app
-├── .gitignore
-├── README.md
+- StockMateAI/
+ - ├── backend/ # Node.js backend API
+ - ├── machineLearning/ # Python ML models & Gemini reasoning
+ - ├── frontend/ # Expo React Native mobile app
+ - ├── .gitignore
+ - ├── README.md
 
 ## Author
  - Neel Gupta
