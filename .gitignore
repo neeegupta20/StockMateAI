@@ -1,0 +1,35 @@
+# Ignore Python-related files in machineLearning/
+machineLearning/__pycache__/
+machineLearning/*.pyc
+machineLearning/*.pyo
+machineLearning/*.pyd
+machineLearning/.env
+machineLearning/.vscode/
+machineLearning/.DS_Store
+machineLearning/venv/
+machineLearning/.idea/
+machineLearning/*.pkl
+machineLearning/combined_df_with_features.csv
+machineLearning/models
+machineLearning/data
+combined_df_with_features.csv
+
+# Ignore Node.js-related files in backend/
+backend/node_modules
+backend/.env
+backend/.DS_Store
+backend/.vscode/
+backend/.idea/
+backend/dist/
+backend/build/
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# macOS & general system junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Jupyter and notebook checkpoints (if used)
+*.ipynb_checkpoints
