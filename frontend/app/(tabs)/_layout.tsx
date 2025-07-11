@@ -1,16 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
-
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import Feather from '@expo/vector-icons/Feather';
+import Foundation from '@expo/vector-icons/Foundation';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function TabLayout() {
-
-
   return (
     <Tabs
       screenOptions={{
@@ -28,21 +23,21 @@ export default function TabLayout() {
         name="index"
         options={{
           title:'Home',
-          tabBarIcon:({ color}) => <IconSymbol size={42} name="house.fill" color={color}/>,
+          tabBarIcon:({ color}) =><Feather name="home" size={30} color={color} />,
           tabBarLabelStyle:{
-            fontSize:16,
-            paddingTop:12
+            fontSize:18,
+            paddingTop:10
           }
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="stockmate"
         options={{
-          title:'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={42} name="paperplane.fill" color={color} />,
+          title:'StockMate',
+          tabBarIcon: ({ color }) => <Foundation name="graph-trend" size={30} color={color} />,
           tabBarLabelStyle:{
-            fontSize:16,
-            paddingTop:12
+            fontSize:18,
+            paddingTop:10
           }
         }}
       />
@@ -50,10 +45,10 @@ export default function TabLayout() {
         name="history"
         options={{
           title:'History',
-          tabBarIcon: ({ color }) => <IconSymbol size={42} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="history" size={30} color={color} />,
           tabBarLabelStyle:{
-            fontSize:16,
-            paddingTop:12
+            fontSize:18,
+            paddingTop:10
           }
         }}
       />
