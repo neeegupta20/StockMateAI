@@ -6,7 +6,7 @@ export default function StockMateScreen(){
   const [messages,setMessages]=useState<string[]>([]);
 
   useEffect(()=>{
-    const introMessage = "Hello, I'm StockMateAI, your intelligent stock market assistant! I’ve been trained on 5 years of NIFTY 50 data to help you make smarter investment decisions.";
+    const introMessage="Hello, I'm StockMateAI, your intelligent stock market assistant! I’ve been trained on 5 years of NIFTY 50 data to help you make smarter investment decisions.";
     const featureMessage = "I can suggest top picks, help you avoid risky stocks, or score a stock you're interested in all backed by data and AI.";
 
     setTimeout(()=>{
@@ -46,7 +46,7 @@ const styles=StyleSheet.create({
     flexDirection:'row',
     alignItems:'flex-end',
     marginTop:20,
-    paddingHorizontal: 10
+    paddingHorizontal:10,
   },
   inner:{
     padding:20,
@@ -58,13 +58,6 @@ const styles=StyleSheet.create({
     marginRight:30,
     borderRadius:10
   },
-  message:{
-    backgroundColor:"#B47EE5",
-    maxWidth:"80%",
-    padding:16,
-    borderRadius:25,
-    borderTopLeftRadius:0,
-} ,
   messageText: {
     color:"#FFFFFF",
     fontSize:18,
@@ -72,7 +65,7 @@ const styles=StyleSheet.create({
     fontWeight:"500"
   },
   messageBubble: {
-    backgroundColor: '#B47EE5',
+    backgroundColor: '#592693',
     padding: 16,
     borderRadius: 20,
     borderTopLeftRadius: 0,
