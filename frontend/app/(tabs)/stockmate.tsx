@@ -40,9 +40,9 @@ export default function StockMateScreen(){
   };
 
   useEffect(()=>{
-    const introMessage="Hi! I'm StockMateAI, your AI stock market assistant. I’ve been trained on 5 years of NIFTY50 Data to assist you to make smarter investment choices.";
+    const introMessage="Hi ! I'm StockMateAI, your AI stock market assistant. I’ve been trained on 5 years of NIFTY50 Data to assist you to make smarter investment choices.";
     const featureMessage="My Job is to suggest Top 3 Picks, Top 3 Stocks to Avoid, or Score a NIFTY50 stock you're interested in. Let's Begin !";
-    const choiceMessage='Pick what you’d want me to assist you with?';
+    const choiceMessage='Pick My Job For Today!';
 
     setTimeout(()=>{
       setMessages([{sender:'bot',text:introMessage}]);
