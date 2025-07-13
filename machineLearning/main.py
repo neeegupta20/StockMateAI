@@ -14,6 +14,7 @@ df=pd.read_csv("combined_df_with_features.csv")
 
 user_duration=int(sys.argv[2])
 user_risk=sys.argv[1]
+user_choice=int(sys.argv[3]);
 
 clf=joblib.load(f"machineLearning/models/classifier_{user_duration}.pkl")
 reg=joblib.load(f"machineLearning/models/regressor_{user_duration}.pkl")
@@ -45,13 +46,13 @@ def score_stock(ticker,latest,pred,prob,expected_return,volatility,close_price):
     if pred==1:
         score+=10
     
-    if user_risk=="low":
+    if user_risk=="Low":
         if er_percent>15 or volatility>0.025:
             score-=10
-    elif user_risk=="mid":
+    elif user_risk=="Medium":
         if er_percent>25:
             score-= 5
-    elif user_risk=="high":
+    elif user_risk=="High":
         if er_percent>20:
             score+= 5
 
@@ -142,10 +143,21 @@ def attach_reasons(stock_list,user_risk,user_duration):
         stock['reason']=reason
     return stock_list
 
-result={
-    "top":top_stocks,
-    "worst":worst_stocks
-}
+if(user_choice==1):
+    result={
+        "top":top_stocks,
+    }
+    print(json.dumps(result))
+elif(user_choice==2):
+    result={
+        "worst":worst_stocks,
+    }
+    print(json.dumps(result))
+elif(user_choice==3):
+    result={
+        "worst":worst_stocks,
+    }
+    print(json.dumps(result))
 
-print(json.dumps(result))
+
 

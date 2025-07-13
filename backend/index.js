@@ -11,12 +11,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/suggest',(req,res)=>{
-    const {risk,duration}=req.body;
+    const {risk,duration,choice}=req.body;
     
-    if(!risk || !duration){
+    if(risk==null || duration==null || choice==null){
         return res.status(400).json({Error:"RISK OR DURATION MISSING."})
     }
-    const py=spawn("/Users/nee.gupta20/opt/anaconda3/bin/python",["machineLearning/main.py",risk,duration]);
+    const py=spawn("/Users/nee.gupta20/opt/anaconda3/bin/python",["machineLearning/main.py",risk,duration,choice]);
     let data="";
     let errorData="";
 
@@ -42,19 +42,6 @@ app.post('/suggest',(req,res)=>{
             return res.status(500).json({ error: "Invalid Python Response" });
         }
     });
-    
 })
 
 app.listen(PORT);
-const nifty50List=[
-    "ADANIENT", "ADANIPORTS", "APOLLOHOSP", "ASIANPAINT", "AXISBANK",
-    "BAJAJ-AUTO", "BAJFINANCE", "BAJAJFINSV", "BPCL", "BHARTIARTL",
-    "BRITANNIA", "CIPLA", "COALINDIA", "DIVISLAB", "DRREDDY",
-    "EICHERMOT", "GRASIM", "HCLTECH", "HDFCBANK", "HDFCLIFE",
-    "HEROMOTOCO", "HINDALCO", "HINDUNILVR", "ICICIBANK", "ITC",
-    "INDUSINDBK", "INFY", "JSWSTEEL", "KOTAKBANK", "LT",
-    "M&M", "MARUTI", "NTPC", "NESTLEIND", "ONGC",
-    "POWERGRID", "RELIANCE", "SBILIFE", "SBIN", "SUNPHARMA",
-    "TCS", "TATACONSUM", "TATAMOTORS", "TATASTEEL", "TECHM",
-    "TITAN", "UPL", "ULTRACEMCO", "WIPRO"
-]
