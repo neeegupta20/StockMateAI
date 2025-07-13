@@ -28,7 +28,6 @@ export default function StockMateScreen(){
   const [step,setStep]=useState<'initial' | 'risk' | 'duration' | 'picker' | 'done'>('initial');
   const [showChoices,setShowChoices]=useState(false);
   const [riskLevel,setRiskLevel]=useState<string | null>(null);
-  const [durationValue,setDurationValue]=useState<number | null>(0);
   const [selectedStock, setSelectedStock]=useState<string>(nifty50List[0]);
   const [globalChoiceId,setGlobalChoiceId]=useState(0);
   const [result,SetResult]=useState(null);
@@ -70,7 +69,7 @@ export default function StockMateScreen(){
 
     if(choiceId===1||choiceId===2){
       setTimeout(() => {
-        setMessages((prev)=>[...prev,{sender:'bot',text:'Great. What is the Risk Preference you want to proceed with?'}]);
+        setMessages((prev)=>[...prev,{sender:'bot',text:'Awesome! What is your Preferred Risk Appetite?'}]);
         setShowChoices(true);
         setStep('risk');
       },1200);
@@ -79,7 +78,7 @@ export default function StockMateScreen(){
       setTimeout(()=>{
         setMessages((prev)=>[
           ...prev,
-          {sender:'bot',text:'Great ! Choose a NIFTY50 Stock for me to score.'}
+          {sender:'bot',text:'Great! Choose a NIFTY50 Stock for me to score.'}
         ]);
         setStep('picker')
       },1200);
@@ -94,7 +93,7 @@ export default function StockMateScreen(){
     setTimeout(()=>{
       setMessages((prev)=>[
         ...prev,
-        { sender: 'bot', text: 'And what is your Preferred Investment Duration?' }
+        { sender: 'bot', text: 'And What is your Preferred Investment Duration?' }
       ]);
       setShowChoices(true);
       setStep('duration');
@@ -108,7 +107,7 @@ export default function StockMateScreen(){
       { sender:'user',text:`Score ${stock}`},
     ]);
     setTimeout(()=>{
-        setMessages((prev)=>[...prev,{sender:'bot',text:'Great. What is the Risk Preference you want to proceed with?'}]);
+        setMessages((prev)=>[...prev,{sender:'bot',text:'Awesome! What is your Preferred Risk Appetite?'}]);
         setShowChoices(true);
         setStep('risk');
     },500);
@@ -119,11 +118,10 @@ export default function StockMateScreen(){
   };
 
   const handleDurationSelection=async(duration:string)=>{
-    setMessages((prev)=>[...prev, { sender: 'user', text: duration }]);
-    let days = 66;
-    if (duration === "Mid Term (188 Days)") days = 188;
-    if (duration === "Long Term (345 Days)") days = 345;
-    setDurationValue(days);
+    setMessages((prev)=>[...prev,{sender: 'user',text: duration}]);
+    let days=66;
+    if(duration==="Mid Term (188 Days)") days=188;
+    if(duration==="Long Term (345 Days)") days=345;
     setShowChoices(false);
     setStep("done");
 
@@ -139,6 +137,7 @@ export default function StockMateScreen(){
   return(
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.inner}>
+        
         {messages.map((msg, index)=>(
           <View key={index} style={[styles.messageRow,msg.sender==='user'?styles.userRow:styles.botRow]}>
             {msg.sender==='bot' && (
@@ -205,6 +204,7 @@ export default function StockMateScreen(){
             </TouchableOpacity>
           </View>
         )}
+
       </ScrollView>
     </SafeAreaView>
   );
