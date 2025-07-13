@@ -4,10 +4,11 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-n
 export default function StockMateScreen(){
 
   const [messages,setMessages]=useState<string[]>([]);
+  
 
   useEffect(()=>{
-    const introMessage="Hello, I'm StockMateAI, your intelligent stock market assistant! I’ve been trained on 5 years of NIFTY 50 data to help you make smarter investment decisions.";
-    const featureMessage = "I can suggest top picks, help you avoid risky stocks, or score a stock you're interested in all backed by data and AI.";
+    const introMessage="Hi!, I'm StockMateAI, your intelligent stock market assistant, I’ve been trained on 5 years of NIFTY50 data to help you make smarter investment decisions.";
+    const featureMessage="I can suggest top picks, help you avoid risky stocks, or score a stock you're interested in all backed by data and AI.";
 
     setTimeout(()=>{
       setMessages([introMessage]);
