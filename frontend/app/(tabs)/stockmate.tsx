@@ -23,6 +23,7 @@ const nifty50List=[
 ]
 
 export default function StockMateScreen(){
+  
   const [messages,setMessages]=useState<Message[]>([]);
   const [step,setStep]=useState<'initial' | 'risk' | 'duration' | 'picker' | 'done'>('initial');
   const [showChoices,setShowChoices]=useState(false);
