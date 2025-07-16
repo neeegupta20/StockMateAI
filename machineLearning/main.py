@@ -24,24 +24,25 @@ features=['RSI_14','MACD_diff','EMA_20','EMA_50','Volume_SMA_5','Close','Return_
 df=df.dropna(subset=features+[f'Future_Return_{user_duration}',f'Target_{user_duration}'])
 
 def score_stock(ticker,latest,pred,prob,expected_return,volatility,close_price):
+    
     score=0
 
     score+=prob*25
     score+=min(expected_return,0.30)*100
     er_percent=expected_return*100
     if er_percent>10:
-        score+=10
+        score+=15
     elif er_percent>5:
-        score+=7
+        score+=10
     elif er_percent>2:
-        score+=5
+        score+=7
     else:
-        score+=2
+        score+=4
 
     if volatility<0.015:
-        score+=10
+        score+=13
     elif volatility<0.025:
-        score+=5
+        score+=7
     
     if pred==1:
         score+=10
@@ -51,10 +52,10 @@ def score_stock(ticker,latest,pred,prob,expected_return,volatility,close_price):
             score-=10
     elif user_risk=="Medium":
         if er_percent>25:
-            score-= 5
+            score-=5
     elif user_risk=="High":
         if er_percent>20:
-            score+= 5
+            score+=5
 
     score=max(0,min(100,round(score,2)))
     return score
@@ -158,6 +159,4 @@ elif(user_choice==3):
         "worst":worst_stocks,
     }
     print(json.dumps(result))
-
-
 

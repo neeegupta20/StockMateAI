@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
+import Loader from '../../assets/rocketLoader.json';
+import LottieView from 'lottie-react-native';
+import { BlurView } from 'expo-blur';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 interface Message{
   sender:'bot' | 'user';
@@ -128,11 +132,24 @@ export default function StockMateScreen(){
     try{
       setLoading(true);
       const res=await axios.post("http://localhost:3000/suggest",{risk:riskLevel,duration:days,choice:globalChoiceId});
+      setLoading(false);
       SetResult(res);
     }catch(error){
       console.log(error);
     }
   };
+
+  {isLoading && (
+    <View >
+      <LottieView source={Loader} loop autoPlay></LottieView>
+    </View>
+  )}
+
+  const getScoreColor=(score:number)=>{
+  if (score <= 30) return '#FF3B30'; 
+  if (score <= 60) return '#FFCC00';
+  return '#4CD964';
+};
 
   return(
     <SafeAreaView style={styles.container}>
@@ -154,12 +171,8 @@ export default function StockMateScreen(){
 
         {showChoices && step === 'initial' && (
           <View style={styles.choicesContainer}>
-            {Object.keys(choicesMap).map((choice) => (
-              <TouchableOpacity
-                key={choice}
-                style={styles.choiceButton}
-                onPress={() => handleChoice(choice)}
-              >
+            {Object.keys(choicesMap).map((choice)=>(
+              <TouchableOpacity key={choice} style={styles.choiceButton} onPress={() => handleChoice(choice)}>
                 <Text style={styles.choiceText}>{choice}</Text>
               </TouchableOpacity>
             ))}
@@ -168,7 +181,7 @@ export default function StockMateScreen(){
 
         {showChoices && step==='risk' && (
           <View style={styles.choicesContainer}>
-            {['Low', 'Medium', 'High'].map((risk) => (
+            {['Low', 'Medium', 'High'].map((risk)=>(
               <TouchableOpacity key={risk}style={styles.choiceButton} onPress={() => handleRiskSelection(risk)}>
                 <Text style={styles.choiceText}>{risk} Risk</Text>
               </TouchableOpacity>
@@ -191,10 +204,7 @@ export default function StockMateScreen(){
             <Text style={{position:"static",paddingTop:20,alignSelf:"center",fontSize:20,fontWeight:"800"}}>
               Pick & Confirm
             </Text>
-            <Picker
-              selectedValue={selectedStock}
-              onValueChange={(itemValue)=>setSelectedStock(itemValue)}
-              style={styles.picker}>
+            <Picker selectedValue={selectedStock} onValueChange={(itemValue)=>setSelectedStock(itemValue)} style={styles.picker}>
               {nifty50List.map((stock)=>(
                 <Picker.Item key={stock} label={stock} value={stock} />
               ))}
@@ -205,6 +215,52 @@ export default function StockMateScreen(){
           </View>
         )}
 
+        {result && (result.data?.top||result.data?.worst) && (
+          <View style={{marginTop:30}}>
+            {(result.data.top || result.data.worst).map((stock:any,index:number)=>(
+              <View key={index} style={styles.stockBox}>
+                <Text style={{color:'white',fontSize:22,fontWeight:'bold'}}>
+                  {stock.ticker}
+                </Text>
+                <View style={{flexDirection:'row',gap:25}}>
+                  <View style={{marginTop:15}}>
+                    <Text style={styles.metric}>Target: ₹{stock.target.toFixed(2)}</Text>
+                    <Text style={styles.metric}>Stop Loss: ₹{stock.stop_loss.toFixed(2)}</Text>
+                    <Text style={styles.metric}>Expected Return: {stock.expected_return.toFixed(2)}%</Text>
+                    <Text style={styles.metric}>Risk Factor: {stock.volatility}</Text>
+                    <Text style={styles.metric}>Prediction: {stock.prediction}</Text>
+                  </View>
+                  <View>
+                    <AnimatedCircularProgress 
+                      size={120} 
+                      width={15} 
+                      fill={stock.score}
+                      tintColor={getScoreColor(stock.score)}
+                      backgroundColor="#444054"
+                      duration={1200}>
+                      {(fill:any)=>(
+                        <Text style={styles.scoreText}>{`${stock.score.toFixed(1)}`}</Text>
+                      )}
+                    </AnimatedCircularProgress>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {isLoading && (
+          <View style={styles.loadingOverlay}>
+            <BlurView intensity={60} tint="dark" style={StyleSheet.absoluteFill}/>
+            <LottieView
+              source={Loader}
+              autoPlay
+              loop
+              style={{ width: 200, height: 200 }}
+            />
+            <Text style={styles.loadingText}>StockMate's Work in Progress..</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -298,5 +354,34 @@ const styles=StyleSheet.create({
     color:'#fff',
     fontSize:16,
     fontWeight:'600',
-  }
+  },
+  stockBox:{
+    backgroundColor:'#2E1E48',
+    padding:16,
+    borderRadius:12,
+    marginBottom:15,
+  },
+  loadingOverlay:{
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor:'rgba(0, 0, 0, 0.3)',
+    justifyContent:'center',
+    alignItems:'center',
+    zIndex:10,
+  },
+  loadingText:{
+    marginTop:20,
+    color:'#FFFFFF',
+    fontSize:18,
+    fontWeight:'600',
+  },
+  scoreText:{
+    color:'white',
+    fontSize:26,
+    fontWeight:'600',
+  },
+  metric:{
+    color:'#DCDCDC',
+    fontSize:16,
+    marginTop:4,
+  },
 });
