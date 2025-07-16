@@ -25,16 +25,8 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/StockMateAIFs.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
-      "expo-font"
+      "expo-font",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true
