@@ -139,17 +139,11 @@ export default function StockMateScreen(){
     }
   };
 
-  {isLoading && (
-    <View >
-      <LottieView source={Loader} loop autoPlay></LottieView>
-    </View>
-  )}
-
   const getScoreColor=(score:number)=>{
-  if (score <= 30) return '#FF3B30'; 
-  if (score <= 60) return '#FFCC00';
-  return '#4CD964';
-};
+    if (score <= 30) return '#FF3B30'; 
+    if (score <= 60) return '#FFCC00';
+    return '#4CD964';
+  };
 
   return(
     <SafeAreaView style={styles.container}>
@@ -252,12 +246,7 @@ export default function StockMateScreen(){
         {isLoading && (
           <View style={styles.loadingOverlay}>
             <BlurView intensity={60} tint="dark" style={StyleSheet.absoluteFill}/>
-            <LottieView
-              source={Loader}
-              autoPlay
-              loop
-              style={{ width: 200, height: 200 }}
-            />
+            <LottieView source={Loader} autoPlay loop style={{width: 200,height:200}}/>
             <Text style={styles.loadingText}>StockMate's Work in Progress..</Text>
           </View>
         )}
