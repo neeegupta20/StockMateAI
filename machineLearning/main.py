@@ -13,8 +13,6 @@ user_risk=sys.argv[1]
 user_choice=int(sys.argv[3]);
 stock_symbol=sys.argv[4] if user_choice==3 and len(sys.argv)>4 else None
 
-print(f"Received stock symbol: {stock_symbol}", file=sys.stderr)
-
 clf=joblib.load(f"machineLearning/models/classifier_{user_duration}.pkl")
 reg=joblib.load(f"machineLearning/models/regressor_{user_duration}.pkl")
 
