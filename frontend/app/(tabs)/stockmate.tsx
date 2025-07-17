@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import Loader from '../../assets/rocketLoader.json';
@@ -36,6 +36,16 @@ export default function StockMateScreen(){
   const [globalChoiceId,setGlobalChoiceId]=useState(0);
   const [result,SetResult]=useState(null);
   const [isLoading,setLoading]=useState(false);
+  const [refreshing,setRefreshing]=useState(false);
+  const [showNewChatPrompt,setShowNewChatPrompt]=useState(false);
+
+  const onRefresh=()=>{
+  setRefreshing(true);
+  setTimeout(()=>{
+    setRefreshing(false);
+    setShowNewChatPrompt(true);
+  }, 1200);
+};
 
   const choicesMap:{[key:string]:number}={
     'Top 3 Stock Picks':1,
@@ -143,7 +153,29 @@ export default function StockMateScreen(){
 
   return(
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.inner}>
+      {showNewChatPrompt && (
+          <TouchableOpacity
+            onPress={()=>{
+              setMessages([]);
+              setStep('initial');
+              setShowNewChatPrompt(false);
+              setRiskLevel(null);
+              SetResult(null);
+              setSelectedStock(nifty50List[0]);
+              setShowChoices(false);
+              const introMessage="Hi ! I'm StockMateAI, your AI stock market assistant. I’ve been trained on 5 years of NIFTY50 Data to assist you to make smarter investment choices.";
+              const featureMessage="My Job is to suggest Top 3 Picks, Top 3 Stocks to Avoid, or Score a NIFTY50 stock you're interested in. Let's Begin !";
+              const choiceMessage='Pick My Job For Today!';
+              setTimeout(()=> setMessages([{sender:'bot',text:introMessage}]),500);
+              setTimeout(()=> setMessages(prev=>[...prev,{sender:'bot',text:featureMessage}]),2000);
+              setTimeout(()=> setMessages(prev=>[...prev,{sender:'bot',text:choiceMessage}]),3500);
+              setTimeout(()=> setShowChoices(true), 4500);
+            }} style={styles.newChatButton}>
+              <Text style={{ color: '#fff', fontWeight: '600' }}>New Chat</Text>
+          </TouchableOpacity>
+      )}
+      <ScrollView contentContainerStyle={styles.inner} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#fff" />}>
         
         {messages.map((msg, index)=>(
           <View key={index} style={[styles.messageRow,msg.sender==='user'?styles.userRow:styles.botRow]}>
@@ -369,4 +401,12 @@ const styles=StyleSheet.create({
     fontSize:16,
     marginTop:4,
   },
+  newChatButton:{
+    backgroundColor:'#854ED9',
+    padding:16,
+    borderRadius:10,
+    alignSelf:'center',
+    marginTop:20,
+    marginBottom:20
+  }
 });
