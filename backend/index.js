@@ -11,12 +11,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/suggest',(req,res)=>{
-    const {risk,duration,choice}=req.body;
+    const {risk,duration,choice,stock_symbol}=req.body;
     
     if(risk==null || duration==null || choice==null){
         return res.status(400).json({Error:"RISK OR DURATION MISSING."})
     }
-    const py=spawn("/Users/nee.gupta20/opt/anaconda3/bin/python",["machineLearning/main.py",risk,duration,choice]);
+
+    const py=spawn("/Users/nee.gupta20/opt/anaconda3/bin/python",["machineLearning/main.py",risk,duration,choice,stock_symbol]);
     let data="";
     let errorData="";
 
@@ -31,7 +32,7 @@ app.post('/suggest',(req,res)=>{
     py.on("close",code=>{
         if(code!==0) {
             console.error("Python Error:",errorData);
-            return res.status(500).json({error: "Internal Python Rrror",details: errorData});
+            return res.status(500).json({error: "Python Error",details:errorData});
         }
 
         try{
@@ -39,7 +40,7 @@ app.post('/suggest',(req,res)=>{
             return res.json(parsed);
         }catch(err){
             console.error("JSON parse error:",err);
-            return res.status(500).json({ error: "Invalid Python Response" });
+            return res.status(500).json({error: "Incorrect Python Response"});
         }
     });
 })

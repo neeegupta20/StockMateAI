@@ -2,19 +2,18 @@ import pandas as pd
 import joblib
 import numpy as np
 import yfinance as yf
-import google.generativeai as genai
 import os
 import sys
 import json
-from dotenv import load_dotenv
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 df=pd.read_csv("combined_df_with_features.csv")
 
 user_duration=int(sys.argv[2])
 user_risk=sys.argv[1]
 user_choice=int(sys.argv[3]);
+stock_symbol=sys.argv[4] if user_choice==3 and len(sys.argv)>4 else None
+
+print(f"Received stock symbol: {stock_symbol}", file=sys.stderr)
 
 clf=joblib.load(f"machineLearning/models/classifier_{user_duration}.pkl")
 reg=joblib.load(f"machineLearning/models/regressor_{user_duration}.pkl")
@@ -61,27 +60,10 @@ def score_stock(ticker,latest,pred,prob,expected_return,volatility,close_price):
     return score
 
 
-def get_reasoning(ticker, pred, prob, expected_return, volatility, user_risk, user_duration):
-    prompt=(
-        f"Give a 50-word explanation for why {ticker} is a good/bad investment."
-        f"The expected return is {expected_return*100:.2f}%,prediction is {'UP' if pred==1 else 'DOWN'}"
-        f"with confidence {prob:.2f},volatility is {volatility:.4f}, "
-        f"risk tolerance is {user_risk},and investment duration is {user_duration} days."
-    )
-
-    try:
-        model=genai.GenerativeModel("gemini-1.5-flash")
-        response=model.generate_content(prompt,generation_config={"temperature":0.7})
-        return response.text.strip()
-
-    except Exception as e:
-        print(f"Gemini FAILED for {ticker}:{e}")
-        return f"AI EXPLANATION NOT AVAILABLE"
- 
-
-
 results=[]
-for ticker in df['Ticker'].unique():
+target_stocks=[stock_symbol] if user_choice==3 and stock_symbol else df['Ticker'].unique()
+
+for ticker in target_stocks:
     stock_df=df[df['Ticker']==ticker].copy()
     if stock_df.empty:
         continue
@@ -113,50 +95,26 @@ for ticker in df['Ticker'].unique():
         close_price=close_price
     )
 
-    target=round(close_price*(1+expected_return),2)
-    stop_loss=round(close_price*(1-volatility*2),2)
-
-    results.append({
-        'ticker':ticker,
-        'score':score,
-        'target':target,
-        'stop_loss':stop_loss,
-        'expected_return':round(expected_return * 100, 2),
-        'volatility':round(volatility, 4),
-        'confidence':round(prob, 2),
-        'prediction':"UP" if pred == 1 else "DOWN"
-    })
-
-top_stocks=sorted(results,key=lambda x:x['score'],reverse=True)[:3]
-worst_stocks=sorted(results,key=lambda x:x['score'])[:3]
-
-def attach_reasons(stock_list,user_risk,user_duration):
-    for stock in stock_list:
-        reason=get_reasoning(
-            ticker=stock['ticker'],
-            pred=1 if stock['prediction']=="UP" else 0,
-            prob=stock['confidence'],
-            expected_return=stock['expected_return']/100,
-            volatility=stock['volatility'],
-            user_risk=user_risk,
-            user_duration=user_duration
-        )
-        stock['reason']=reason
-    return stock_list
-
-if(user_choice==1):
     result={
-        "top":top_stocks,
+        'ticker': ticker,
+        'score': score,
+        'target': round(close_price * (1 + expected_return), 2),
+        'stop_loss': round(close_price * (1 - volatility * 2), 2),
+        'expected_return': round(expected_return * 100, 2),
+        'volatility': round(volatility, 4),
+        'confidence': round(prob, 2),
+        'prediction': "UP" if pred == 1 else "DOWN"
     }
-    print(json.dumps(result))
-elif(user_choice==2):
-    result={
-        "worst":worst_stocks,
-    }
-    print(json.dumps(result))
-elif(user_choice==3):
-    result={
-        "worst":worst_stocks,
-    }
-    print(json.dumps(result))
 
+    results.append(result)
+
+if user_choice==1:
+    top_stocks=sorted(results, key=lambda x: x['score'],reverse=True)[:3]
+    print(json.dumps({"top": top_stocks},indent=2))
+
+elif user_choice==2:
+    worst_stocks=sorted(results, key=lambda x:x['score'])[:3]
+    print(json.dumps({"worst": worst_stocks},indent=2))
+
+elif user_choice==3:
+    print(json.dumps({"single": [results[0]]},indent=2))

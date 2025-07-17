@@ -115,10 +115,6 @@ export default function StockMateScreen(){
         setShowChoices(true);
         setStep('risk');
     },500);
-    setTimeout(()=>{
-      setShowChoices(true);
-      setStep('risk');
-    },1000)
   };
 
   const handleDurationSelection=async(duration:string)=>{
@@ -131,7 +127,7 @@ export default function StockMateScreen(){
 
     try{
       setLoading(true);
-      const res=await axios.post("http://localhost:3000/suggest",{risk:riskLevel,duration:days,choice:globalChoiceId});
+      const res=await axios.post("http://localhost:3000/suggest",{risk:riskLevel,duration:days,choice:globalChoiceId,stock_symbol:selectedStock});
       setLoading(false);
       SetResult(res);
     }catch(error){
@@ -140,8 +136,8 @@ export default function StockMateScreen(){
   };
 
   const getScoreColor=(score:number)=>{
-    if (score <= 30) return '#FF3B30'; 
-    if (score <= 60) return '#FFCC00';
+    if (score<=30) return '#FF3B30'; 
+    if (score<=60) return '#FFCC00';
     return '#4CD964';
   };
 
@@ -209,9 +205,9 @@ export default function StockMateScreen(){
           </View>
         )}
 
-        {result && (result.data?.top||result.data?.worst) && (
+        {result && (result.data?.top||result.data?.worst || result.data?.single) && (
           <View style={{marginTop:30}}>
-            {(result.data.top || result.data.worst).map((stock:any,index:number)=>(
+            {(result.data.top || result.data.worst || result.data?.single).map((stock:any,index:number)=>(
               <View key={index} style={styles.stockBox}>
                 <Text style={{color:'white',fontSize:22,fontWeight:'bold'}}>
                   {stock.ticker}
@@ -322,7 +318,7 @@ const styles=StyleSheet.create({
     width:'100%',
     backgroundColor:'#FDEADD',
     borderRadius:10,
-    paddingVertical:-300,
+    paddingVertical:10,
     paddingHorizontal: 10,
     marginTop:20
   },
