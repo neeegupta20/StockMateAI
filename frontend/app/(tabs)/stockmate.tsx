@@ -247,14 +247,14 @@ export default function StockMateScreen(){
           </View>
         )}
 
-        {result && (result.data?.top||result.data?.worst || result.data?.single) && (
+        {result && (result.data?.top || result.data?.worst || result.data?.single) && (
           <View style={{marginTop:30}}>
             {(result.data.top || result.data.worst || result.data?.single).map((stock:any,index:number)=>(
               <View key={index} style={styles.stockBox}>
                 <Text style={{color:'white',fontSize:22,fontWeight:'bold'}}>
                   {stock.ticker}
                 </Text>
-                <View style={{flexDirection:'row',gap:25}}>
+                <View style={{flexDirection:'row',gap:25,marginTop:30}}>
                   <View style={{marginTop:15}}>
                     <Text style={styles.metric}>Target: ₹{stock.target.toFixed(2)}</Text>
                     <Text style={styles.metric}>Stop Loss: ₹{stock.stop_loss.toFixed(2)}</Text>
