@@ -7,6 +7,7 @@ import Loader from '../../assets/rocketLoader.json';
 import LottieView from 'lottie-react-native';
 import { BlurView } from 'expo-blur';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { useWatchlist } from '../../hooks/useWatchList';
 
 interface Message{
   sender:'bot' | 'user';
@@ -32,12 +33,32 @@ export default function StockMateScreen(){
   const [step,setStep]=useState<'initial' | 'risk' | 'duration' | 'picker' | 'done'>('initial');
   const [showChoices,setShowChoices]=useState(false);
   const [riskLevel,setRiskLevel]=useState<string | null>(null);
-  const [selectedStock, setSelectedStock]=useState<string>(nifty50List[0]);
+  const [selectedStock,setSelectedStock]=useState<string>(nifty50List[0]);
   const [globalChoiceId,setGlobalChoiceId]=useState(0);
   const [result,SetResult]=useState(null);
   const [isLoading,setLoading]=useState(false);
   const [refreshing,setRefreshing]=useState(false);
   const [showNewChatPrompt,setShowNewChatPrompt]=useState(false);
+  const {addStock,removeStock,getWatchlist}=useWatchlist();
+  const [starredTickers,setStarredTickers]=useState<string[]>([]);
+
+  useEffect(()=>{
+    (async()=>{
+      const list=await getWatchlist();
+      setStarredTickers(list.map(item=>item.ticker));
+    })();
+  },[]);
+
+  const toggleStar=async(stock:any)=>{
+    const isStarredNow=starredTickers.includes(stock.ticker);
+    if(isStarredNow){
+      await removeStock(stock.ticker);
+      setStarredTickers(prev=>prev.filter(s=>s!==stock.ticker));
+    }else{
+      await addStock(stock);
+      setStarredTickers(prev=>[...prev,stock.ticker]);
+    }
+  };
 
   const onRefresh=()=>{
   setRefreshing(true);
@@ -254,8 +275,11 @@ export default function StockMateScreen(){
                 <Text style={{color:'white',fontSize:22,fontWeight:'bold'}}>
                   {stock.ticker}
                 </Text>
+                <TouchableOpacity onPress={()=>toggleStar(stock)} style={styles.starredIcon}>
+                  <FontAwesome name="star" size={24} color={starredTickers.includes(stock.ticker) ? "#FFD700" : "white"}/>
+                </TouchableOpacity>
                 <View style={{flexDirection:'row',gap:25,marginTop:30}}>
-                  <View style={{marginTop:15}}>
+                  <View>
                     <Text style={styles.metric}>Target: ₹{stock.target.toFixed(2)}</Text>
                     <Text style={styles.metric}>Stop Loss: ₹{stock.stop_loss.toFixed(2)}</Text>
                     <Text style={styles.metric}>Expected Return: {stock.expected_return.toFixed(2)}%</Text>
@@ -418,5 +442,10 @@ const styles=StyleSheet.create({
     alignSelf:'center',
     marginTop:20,
     marginBottom:20
+  },
+  starredIcon:{
+    position:"absolute",
+    top:15,
+    right:30
   }
 });
