@@ -16,7 +16,7 @@ export default function RootLayout(){
   useEffect(()=>{
     setTimeout(()=>{
       setShowSplashScreen(false);
-    },8100); 
+    },8300); 
   },[player]);
 
   if(showSplashScreen){

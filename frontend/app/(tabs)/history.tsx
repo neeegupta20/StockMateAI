@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 
 export default function HistoryScreen() {
   
-    return (
+    return(
         <SafeAreaView style={styles.container}>
 
         </SafeAreaView>

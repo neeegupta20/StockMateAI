@@ -138,10 +138,20 @@ export default function StockMateScreen(){
     try{
       setLoading(true);
       const res=await axios.post("http://localhost:3000/suggest",{risk:riskLevel,duration:days,choice:globalChoiceId,stock_symbol:selectedStock});
-      setLoading(false);
-      SetResult(res);
+      if(res.status===200){
+        setLoading(false);
+        SetResult(res);
+        setTimeout(()=>{
+          setShowNewChatPrompt(true);
+        },4000)
+      }
     }catch(error){
-      console.log(error);
+      setLoading(false);
+       setMessages(prev=>[
+        ...prev,
+        {sender:'bot',text:"Network Error ⚠️. Try Again Later" }
+      ]);
+      setShowNewChatPrompt(true);
     }
   };
 
