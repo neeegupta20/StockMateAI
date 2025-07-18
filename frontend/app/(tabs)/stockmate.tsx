@@ -224,7 +224,7 @@ export default function StockMateScreen(){
         {step==='picker' && (
           <View style={styles.pickerWrapper}>
             <Text style={{position:"static",paddingTop:20,alignSelf:"center",fontSize:20,fontWeight:"800"}}>
-              Pick & Confirm
+               ⬇📈📉
             </Text>
             <Picker selectedValue={selectedStock} onValueChange={(itemValue)=>setSelectedStock(itemValue)} style={styles.picker}>
               {nifty50List.map((stock)=>(
