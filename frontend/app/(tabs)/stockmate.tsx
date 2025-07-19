@@ -7,7 +7,7 @@ import Loader from '../../assets/rocketLoader.json';
 import LottieView from 'lottie-react-native';
 import { BlurView } from 'expo-blur';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { useWatchlist } from '../../hooks/useWatchList';
+import { useWatchlist } from '../../hooks/useWatchlist';
 
 interface Message{
   sender:'bot' | 'user';

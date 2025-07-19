@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useWatchlist } from '../../hooks/useWatchList';
+import { useWatchlist } from '../../hooks/useWatchlist';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { router } from 'expo-router';
