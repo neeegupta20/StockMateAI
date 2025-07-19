@@ -17,7 +17,7 @@ export function useWatchlist(){
         const list=await getWatchlist();
         const exists=list.some((s:any)=>s.ticker===stock.ticker);
         if(!exists){
-            const updated = [...list, stock];
+            const updated=[...list, stock];
             await saveWatchlist(updated);
         }
     };
