@@ -37,7 +37,7 @@ export default function WatchlistScreen(){
 
   return(
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{marginTop:25}}>
         {watchlist.map((stock, index)=>(
           <View key={index} style={styles.stockBox}>
             <Text style={{color:'white',fontSize:22,fontWeight:'bold'}}>
