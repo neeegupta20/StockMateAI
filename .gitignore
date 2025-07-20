@@ -12,7 +12,7 @@ machineLearning/*.pkl
 machineLearning/combined_df_with_features.csv
 machineLearning/models
 machineLearning/data
-combined_df_with_features.csv
+
 
 # Ignore Node.js-related files in backend/
 backend/node_modules
@@ -27,7 +27,7 @@ backend/yarn-debug.log*
 backend/yarn-error.log*
 backend/models
 
-*.csv
+
 
 # macOS & general system junk
 .DS_Store
