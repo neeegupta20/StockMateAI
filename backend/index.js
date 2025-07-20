@@ -10,6 +10,10 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/',(req, res)=>{
+  res.send('BACKEND UP AND RUNNING');
+});
+
 app.post('/suggest',(req,res)=>{
     const {risk,duration,choice,stock_symbol}=req.body;
     

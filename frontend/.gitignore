@@ -39,4 +39,6 @@ yarn-error.*
 ios/ 
 android/
 
+config.ts
+
 app-example
