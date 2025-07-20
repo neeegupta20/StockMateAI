@@ -25,6 +25,7 @@ backend/build/
 backend/npm-debug.log*
 backend/yarn-debug.log*
 backend/yarn-error.log*
+backend/models
 
 *.csv
 

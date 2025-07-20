@@ -17,7 +17,7 @@ app.post('/suggest',(req,res)=>{
         return res.status(400).json({Error:"RISK OR DURATION MISSING."})
     }
 
-    const py=spawn("/Users/nee.gupta20/opt/anaconda3/bin/python",["machineLearning/main.py",risk,duration,choice,stock_symbol]);
+    const py=spawn("python3",["./main.py",risk,duration,choice,stock_symbol]);
     let data="";
     let errorData="";
 
@@ -45,4 +45,4 @@ app.post('/suggest',(req,res)=>{
     });
 })
 
-app.listen(PORT);
+app.listen(PORT,'0.0.0.0');
