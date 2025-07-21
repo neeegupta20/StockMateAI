@@ -8,7 +8,7 @@ import LottieView from 'lottie-react-native';
 import { BlurView } from 'expo-blur';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { useWatchlist } from '../../hooks/useWatchlist';
-import { BASE_URL } from '../../config';
+import { API_KEY, BASE_URL } from '../../config';
 
 interface Message{
   sender:'bot' | 'user';
@@ -159,7 +159,10 @@ export default function StockMateScreen(){
 
     try{
       setLoading(true);
-      const res=await axios.post(`${BASE_URL}/suggest`,{risk:riskLevel,duration:days,choice:globalChoiceId,stock_symbol:selectedStock});
+      const res=await axios.post(`${BASE_URL}/suggest`,
+        {risk:riskLevel,duration:days,choice:globalChoiceId,stock_symbol:selectedStock},
+        {headers:{'x-api-key':API_KEY}},
+      );
       if(res.status===200){
         setLoading(false);
         SetResult(res);

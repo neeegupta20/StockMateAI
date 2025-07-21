@@ -2,13 +2,26 @@ const express=require("express");
 const cors=require("cors");
 const bodyParser=require("body-parser");
 const {spawn}=require("child_process");
+const dotenv=require("dotenv");
 
+dotenv.config();
 const app=express();
 const PORT=3000;
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use((req,res,next)=>{
+    if(req.path==='/'){
+        return next();
+    }
+    const key=req.headers['x-api-key'];
+    if(!key || key!==process.env.API_KEY){
+        return res.status(403).json({error:"Forbidden"});
+    }
+    next();
+})
 
 app.get('/',(req, res)=>{
   res.send('BACKEND UP AND RUNNING');
